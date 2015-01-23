@@ -67,6 +67,11 @@ class Byte {
         this.Set(val ? (this.value | Math.pow(2, pos)) : (this.value & ~Math.pow(2, pos)));
     }
 
+    public Test(pos: number) {
+        pos = pos % 8;
+        return (this.value & Math.pow(2, pos)) != 0;
+    }
+
     public ShiftLeft(carry: boolean = false, value: boolean = false): boolean {
         var ret = (this.value & 0x80) != 0;
         this.Set(this.value << 1);

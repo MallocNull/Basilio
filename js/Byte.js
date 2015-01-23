@@ -44,6 +44,10 @@ var Byte = (function () {
         pos = pos % 8;
         this.Set(val ? (this.value | Math.pow(2, pos)) : (this.value & ~Math.pow(2, pos)));
     };
+    Byte.prototype.Test = function (pos) {
+        pos = pos % 8;
+        return (this.value & Math.pow(2, pos)) != 0;
+    };
     Byte.prototype.ShiftLeft = function (carry, value) {
         if (carry === void 0) { carry = false; }
         if (value === void 0) { value = false; }

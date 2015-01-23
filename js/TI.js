@@ -3,9 +3,11 @@ var TI = (function () {
     function TI() {
     }
     TI.Init = function () {
-        var a = new Byte(40);
+        var a = new Byte(10);
         var b = new Byte(40);
-        alert(a.Get());
+        //a.Add(b);
+        //a.Sub(b);
+        alert(a.Neg().Get());
     };
     return TI;
 })();

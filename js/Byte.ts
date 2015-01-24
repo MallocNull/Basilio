@@ -67,7 +67,7 @@ class Byte {
         this.Set(val ? (this.value | Math.pow(2, pos)) : (this.value & ~Math.pow(2, pos)));
     }
 
-    public Test(pos: number) {
+    public Test(pos: number): boolean {
         pos = pos % 8;
         return (this.value & Math.pow(2, pos)) != 0;
     }

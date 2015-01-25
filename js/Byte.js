@@ -67,10 +67,20 @@ var Byte = (function () {
     return Byte;
 })();
 var Word = (function () {
-    function Word(init) {
-        if (init === void 0) { init = 0; }
-        this.value = [new Byte((init & ~0xFF) >> 8), new Byte(init & 0xFF)];
+    function Word(high, low) {
+        this.Set(high, low);
     }
+    Word.prototype.High = function () {
+        return this.value[0];
+    };
+    Word.prototype.Low = function () {
+        return this.value[1];
+    };
+    Word.prototype.Set = function (high, low) {
+        this.value = typeof high == "number" ? [new Byte((high & ~0xFF) >> 8), new Byte(high & 0xFF)] : [high, low];
+    };
+    Word.prototype.SetHigh = function (value) {
+    };
     return Word;
 })();
 //# sourceMappingURL=Byte.js.map

@@ -90,8 +90,27 @@ class Byte {
 class Word {
     private value: Byte[];
 
+    public constructor(high: number);
+    public constructor(high: Byte, low: Byte);
+    public constructor(high: any, low?: Byte) {
+        this.Set(high, low);
+    }
 
-    public constructor(init: number = 0) {
-        this.value = [new Byte((init & ~0xFF) >> 8), new Byte(init & 0xFF)];
+    public High(): Byte {
+        return this.value[0];
+    }
+
+    public Low(): Byte {
+        return this.value[1];
+    }
+
+    public Set(high: number);
+    public Set(high: Byte, low: Byte);
+    public Set(high: any, low?: Byte) {
+        this.value = typeof high == "number" ? [new Byte((high & ~0xFF) >> 8), new Byte(high & 0xFF)] : [high, low];
+    }
+
+    public SetHigh(value: Byte) {
+        
     }
 }

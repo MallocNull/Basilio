@@ -1,7 +1,7 @@
 /// <reference path="Byte.ts" />
 
 class Bank {
-    public data: Byte[];
+    public data: Byte[] = [];
 
     public constructor(fill: number = 0) {
 
@@ -28,6 +28,14 @@ class Memory {
     static romLock: boolean = true;
 
     static Init() {
+
+    }
+
+    static Get(location: Word): Byte {
+        return new Byte(0);
+    }
+
+    static Set(location: Word, value: Byte) {
 
     }
 }

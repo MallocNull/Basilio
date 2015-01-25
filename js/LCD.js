@@ -35,7 +35,8 @@ var LCD = (function () {
     };
     LCD.SetPixel = function (x, y, value) {
         if (value === void 0) { value = true; }
-        LCD.SetCellY(LCD.GetCell(x, y), value ? 2 : 0);
+        if (LCD.enabled)
+            LCD.SetCellY(LCD.GetCell(x, y), value ? 2 : 0);
     };
     LCD.IncrementCursor = function () {
         switch (LCD.inc) {
@@ -46,10 +47,10 @@ var LCD = (function () {
                 LCD.cursor[0] = (LCD.cursor[0] + 1) % 64;
                 break;
             case 1 /* RIGHT */:
-                LCD.cursor[1] = (LCD.cursor[1] + 1) % (LCD.mode ? 15 : 20);
+                LCD.cursor[1] = (LCD.cursor[1] + 1) % (LCD.cursor[1] < (LCD.mode ? 15 : 20) ? (LCD.mode ? 15 : 20) : 32);
                 break;
             case 3 /* LEFT */:
-                LCD.cursor[1] = (LCD.cursor[1] - 1) % (LCD.mode ? 15 : 20);
+                LCD.cursor[1] = LCD.cursor[1] > 0 ? LCD.cursor[1] - 1 : (LCD.mode ? 14 : 19);
                 break;
         }
     };
@@ -77,28 +78,31 @@ var LCD = (function () {
         }
     };
     LCD.Read = function () {
-        var value;
-        if (LCD.mode)
-            value = LCD.vram[LCD.cursor[0]][LCD.cursor[1]];
-        else {
-            value = new Byte(0);
-            for (var bit = 0; bit < 6; bit++)
-                value.Bit(5 - bit, LCD.vram[LCD.cursor[0]][Math.floor((6 * LCD.cursor[1] + bit) / 8)].Test(7 - ((6 * LCD.cursor[1] + bit) % 8)));
+        var value = new Byte(0);
+        if ((LCD.mode && LCD.cursor[1] < 15) || (!LCD.mode && LCD.cursor[1] < 20)) {
+            if (LCD.mode)
+                value = LCD.vram[LCD.cursor[0]][LCD.cursor[1]];
+            else {
+                value = new Byte(0);
+                for (var bit = 0; bit < 6; bit++)
+                    value.Bit(5 - bit, LCD.vram[LCD.cursor[0]][Math.floor((6 * LCD.cursor[1] + bit) / 8)].Test(7 - ((6 * LCD.cursor[1] + bit) % 8)));
+            }
         }
         LCD.IncrementCursor();
         return value;
     };
     LCD.Write = function (value) {
-        if (LCD.mode) {
-            LCD.vram[LCD.cursor[0]][LCD.cursor[1]] = value;
-            for (var bit = 0; bit < 8; bit++)
-                LCD.SetPixel(8 * LCD.cursor[1] + bit, LCD.cursor[0], value.Test(7 - bit));
-        }
-        else {
-            for (var bit = 0; bit < 6; bit++) {
-                console.log(value.Test(bit));
-                LCD.SetPixel(6 * LCD.cursor[1] + bit, LCD.cursor[0], value.Test(5 - bit));
-                LCD.vram[LCD.cursor[0]][Math.floor((6 * LCD.cursor[1] + bit) / 8)].Bit(7 - ((6 * LCD.cursor[1] + bit) % 8), value.Test(5 - bit));
+        if ((LCD.mode && LCD.cursor[1] < 15) || (!LCD.mode && LCD.cursor[1] < 20)) {
+            if (LCD.mode) {
+                LCD.vram[LCD.cursor[0]][LCD.cursor[1]] = value;
+                for (var bit = 0; bit < 8; bit++)
+                    LCD.SetPixel(8 * LCD.cursor[1] + bit, LCD.cursor[0], value.Test(7 - bit));
+            }
+            else {
+                for (var bit = 0; bit < 6; bit++) {
+                    LCD.SetPixel(6 * LCD.cursor[1] + bit, LCD.cursor[0], value.Test(5 - bit));
+                    LCD.vram[LCD.cursor[0]][Math.floor((6 * LCD.cursor[1] + bit) / 8)].Bit(7 - ((6 * LCD.cursor[1] + bit) % 8), value.Test(5 - bit));
+                }
             }
         }
         LCD.IncrementCursor();
@@ -107,9 +111,13 @@ var LCD = (function () {
         LCD.cursor[0] = row % 64;
     };
     LCD.SetColumn = function (col) {
-        LCD.cursor[1] = col % (LCD.mode ? 15 : 20);
+        LCD.cursor[1] = col % 32;
     };
-    LCD.SetMode = function () {
+    LCD.SetMode = function (mode) {
+        LCD.mode = mode;
+    };
+    LCD.SetDirection = function (dir) {
+        LCD.inc = dir;
     };
     LCD.contrast = 12;
     LCD.vram = [];

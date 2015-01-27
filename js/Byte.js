@@ -80,6 +80,20 @@ var Word = (function () {
         this.value = typeof high == "number" ? [new Byte((high & ~0xFF) >> 8), new Byte(high & 0xFF)] : [high, low];
     };
     Word.prototype.SetHigh = function (value) {
+        this.value[0] = typeof value == "number" ? new Byte(value) : value;
+    };
+    Word.prototype.SetLow = function (value) {
+        this.value[1] = typeof value == "number" ? new Byte(value) : value;
+    };
+    Word.prototype.Add = function (value) {
+        value = typeof value == "number" ? new Word(value) : value;
+        var overflow = [this.value[0].Add(value.High()), this.value[1].Add(value.Low())];
+    };
+    Word.prototype.AddByte = function (value) {
+        value = typeof value == "number" ? new Byte(value) : value;
+        var over = this.value[1].Add(value);
+        over = this.value[0].Add(over);
+        return new Word(over.Get());
     };
     return Word;
 })();

@@ -21,6 +21,10 @@ var Registers = (function () {
         var tmp = "ABCDEFHLIR";
         for (var i; i < tmp.length; i++)
             Registers.byteRegisters[tmp[i]] = new Byte(0);
+        Registers.shadowRegisters["AF"] = new Word(0);
+        Registers.shadowRegisters["BC"] = new Word(0);
+        Registers.shadowRegisters["DE"] = new Word(0);
+        Registers.shadowRegisters["HL"] = new Word(0);
     };
     Registers.GenerateWord = function (high, low) {
         return new Word(Registers.byteRegisters[high], Registers.byteRegisters[low]);
@@ -32,7 +36,22 @@ var Registers = (function () {
     Registers.GetFlag = function (flag) {
         return Registers.byteRegisters["F"].Test(flag);
     };
-    Registers.ExchangeAccumlatorFlags = function () {
+    Registers.ExchangeAFShadow = function () {
+        var tmp = Registers.shadowRegisters["AF"];
+        Registers.shadowRegisters["AF"].Set(Registers.byteRegisters["A"], Registers.byteRegisters["F"]);
+        Registers.byteRegisters["A"] = tmp.High();
+        Registers.byteRegisters["F"] = tmp.Low();
+    };
+    Registers.ExchangeShadow = function () {
+        var regs = ["BC", "DE", "HL"];
+        for (var reg in regs) {
+            var tmp = Registers.shadowRegisters[regs[reg]];
+            Registers.shadowRegisters[regs[reg]].Set(Registers.byteRegisters[regs[reg][0]], Registers.byteRegisters[regs[reg][1]]);
+            Registers.byteRegisters[regs[reg][0]] = tmp.High();
+            Registers.byteRegisters[regs[reg][1]] = tmp.Low();
+        }
+    };
+    Registers.Exchange = function (a, b) {
     };
     Registers.byteRegisters = [];
     Registers.shadowRegisters = [];

@@ -44,6 +44,19 @@ TI.Opcodes[0x07] = function (args) {
     return [1, 4];
 };
 TI.Opcodes[0x08] = function (args) {
-    return [];
+    Registers.ExchangeAFShadow();
+    return [1, 4];
+};
+TI.Opcodes[0x09] = function (args) {
+    // add hl, bc
+    return [1, 11];
+};
+TI.Opcodes[0x0A] = function (args) {
+    Registers.byteRegisters["A"] = Memory.Get(Registers.GenerateWord("B", "C"));
+    return [1, 7];
+};
+TI.Opcodes[0x0B] = function (args) {
+    // dec b
+    return [1, 4];
 };
 //# sourceMappingURL=0x0.js.map

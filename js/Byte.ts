@@ -110,7 +110,32 @@ class Word {
         this.value = typeof high == "number" ? [new Byte((high & ~0xFF) >> 8), new Byte(high & 0xFF)] : [high, low];
     }
 
-    public SetHigh(value: Byte) {
+    public SetHigh(value: number);
+    public SetHigh(value: Byte);
+    public SetHigh(value: any) {
+        this.value[0] = typeof value == "number" ? new Byte(value) : value;
+    }
+
+    public SetLow(value: number);
+    public SetLow(value: Byte);
+    public SetLow(value: any) {
+        this.value[1] = typeof value == "number" ? new Byte(value) : value;
+    }
+
+    public Add(value: number): Word;
+    public Add(value: Word): Word;
+    public Add(value: any): Word {
+        value = typeof value == "number" ? new Word(value) : value;
+        var overflow = [this.value[0].Add(value.High()), this.value[1].Add(value.Low())];
         
+    }
+
+    public AddByte(value: number): Word;
+    public AddByte(value: Byte): Word;
+    public AddByte(value: any): Word {
+        value = typeof value == "number" ? new Byte(value) : value;
+        var over = this.value[1].Add(value);
+        over = this.value[0].Add(over);
+        return new Word(over.Get());
     }
 }

@@ -53,6 +53,21 @@ TI.Opcodes[0x07] = function(args: Byte[]): number[] {
 };
 
 TI.Opcodes[0x08] = function(args: Byte[]): number[] {
+    Registers.ExchangeAFShadow();
+    return [1,4];
+};
 
-    return []
+TI.Opcodes[0x09] = function(args: Byte[]): number[] {
+    // add hl, bc
+    return [1, 11];
+};
+
+TI.Opcodes[0x0A] = function(args: Byte[]): number[] {
+    Registers.byteRegisters["A"] = Memory.Get(Registers.GenerateWord("B","C"));
+    return [1, 7];
+};
+
+TI.Opcodes[0x0B] = function(args: Byte[]): number[] {
+    // dec b
+    return [1, 4];
 };

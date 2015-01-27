@@ -15,14 +15,18 @@ interface opcode {
 class TI {
     public static Opcodes: opcode[] = [];
 
+    static PerformOperation(data: Byte[]) {
+        this.Opcodes[data[0].Get()](data);
+    }
+
     static Init() {
         LCD.Init();
         var a = new Byte(0xF0);
         var b = new Byte(10);
         //a.Sub(b);
-        alert(a.Get());
+        //alert(a.Get());
         a.ShiftLeft(true);
-        alert(a.Get());
+        //alert(a.Get());
     }
 }
 

@@ -68,6 +68,17 @@ TI.Opcodes[0x0A] = function(args: Byte[]): number[] {
 };
 
 TI.Opcodes[0x0B] = function(args: Byte[]): number[] {
-    // dec b
+    // dec bc
+    return [1, 4];
+};
+
+TI.Opcodes[0x0C] = function(args: Byte[]): number[] {
+    var tmp = Registers.byteRegisters["C"];
+    var over = Registers.byteRegisters["C"].Add(1);
+    Registers.SetFlag(Flags.ADDSUB, false);
+    Registers.SetFlag(Flags.ZERO, over.Get() != 0);
+    Registers.SetFlag(Flags.PARITY, tmp.Test(7) == false && Registers.byteRegisters["C"].Test(7) == true);
+    Registers.SetFlag(Flags.HALF, (tmp.Get() & 0x0F) == 0x0F);
+    Registers.SetFlag(Flags.SIGN, Registers.byteRegisters["C"].Test(7))
     return [1, 4];
 };

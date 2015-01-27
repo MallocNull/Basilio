@@ -96,6 +96,10 @@ class Word {
         this.Set(high, low);
     }
 
+    public Get(): number {
+        return (this.value[0].Get() << 8) | this.value[1].Get();
+    }
+
     public High(): Byte {
         return this.value[0];
     }
@@ -126,16 +130,17 @@ class Word {
     public Add(value: Word): Word;
     public Add(value: any): Word {
         value = typeof value == "number" ? new Word(value) : value;
-        var overflow = [this.value[0].Add(value.High()), this.value[1].Add(value.Low())];
-        
+        var hold = this.Get() + value.Get();
+        this.Set(hold);
+        return new Word(hold > 0xFFFF ? hold - 0xFFFF : 0);
+        //var overflow = [this.value[0].Add(value.High()), this.value[1].Add(value.Low())];
+        //return new Word(overflow[0].Get() + this.value[0].Add(overflow[1]).Get());
     }
 
     public AddByte(value: number): Word;
     public AddByte(value: Byte): Word;
     public AddByte(value: any): Word {
-        value = typeof value == "number" ? new Byte(value) : value;
-        var over = this.value[1].Add(value);
-        over = this.value[0].Add(over);
-        return new Word(over.Get());
+        value = typeof value != "number" ? value.Get() : value;
+        return this.Add(value);
     }
 }

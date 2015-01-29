@@ -60,7 +60,9 @@ var Registers = (function () {
         }
     };
 
-    Registers.Exchange = function (a, b) {
+    Registers.SetRegisterPair = function (pair, value) {
+        Registers.byteRegisters[pair[0]] = value.High();
+        Registers.byteRegisters[pair[1]] = value.Low();
     };
     Registers.byteRegisters = [];
     Registers.shadowRegisters = [];

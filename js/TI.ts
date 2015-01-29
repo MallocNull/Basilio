@@ -20,7 +20,9 @@ class TI {
     }
 
     static Init() {
+        Registers.Init();
         LCD.Init();
+        Memory.Init();
         var a = new Byte(0xF0);
         var b = new Byte(10);
         //a.Sub(b);

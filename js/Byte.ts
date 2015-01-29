@@ -137,10 +137,58 @@ class Word {
         //return new Word(overflow[0].Get() + this.value[0].Add(overflow[1]).Get());
     }
 
-    public AddByte(value: number): Word;
-    public AddByte(value: Byte): Word;
-    public AddByte(value: any): Word {
-        value = typeof value != "number" ? value.Get() : value;
+    public Sub(value: number): Word;
+    public Sub(value: Word): Word;
+    public Sub(value: any): Word {
+        value = typeof value == "number" ? new Word(value) : value;
+        return this.Add(value.Neg());
+    }
+
+    public AddByte(value: number, signed: boolean): Word;
+    public AddByte(value: Byte, signed: boolean): Word;
+    public AddByte(value: any, signed: boolean = false): Word {
+        value = typeof value != "number" ? new Word((value.Test(7) && signed ? 0xFF00 : 0x0000) | value.Get()) : new Word(value);
         return this.Add(value);
+    }
+
+    public SubByte(value: number): Word;
+    public SubByte(value: Byte): Word;
+    public SubByte(value: any): Word {
+        value = typeof value != "number" ? new Byte(value) : value;
+        return this.AddByte(value.Neg(), true);
+    }
+
+    public Not() {
+        this.value[0].Not();
+        this.value[1].Not();
+    }
+
+    public And(value: number);
+    public And(value: Word);
+    public And(value: any) {
+        value = typeof value == "number" ? new Word(value) : value;
+        this.value[0].And(value.High());
+        this.value[1].And(value.Low());
+    }
+
+    public Or(value: number);
+    public Or(value: Word);
+    public Or(value: any) {
+        value = typeof value == "number" ? new Word(value) : value;
+        this.value[0].Or(value.High());
+        this.value[1].Or(value.Low());
+    }
+
+    public Xor(value: number);
+    public Xor(value: Word);
+    public Xor(value: any) {
+        value = typeof value == "number" ? new Word(value) : value;
+        this.value[0].Xor(value.High());
+        this.value[1].Xor(value.Low());
+    }
+
+    public Neg() {
+        this.Not();
+        this.Add(1);
     }
 }

@@ -116,9 +116,48 @@ var Word = (function () {
         //return new Word(overflow[0].Get() + this.value[0].Add(overflow[1]).Get());
     };
 
-    Word.prototype.AddByte = function (value) {
-        value = typeof value != "number" ? value.Get() : value;
+    Word.prototype.Sub = function (value) {
+        value = typeof value == "number" ? new Word(value) : value;
+        return this.Add(value.Neg());
+    };
+
+    Word.prototype.AddByte = function (value, signed) {
+        if (typeof signed === "undefined") { signed = false; }
+        value = typeof value != "number" ? new Word((value.Test(7) && signed ? 0xFF00 : 0x0000) | value.Get()) : new Word(value);
         return this.Add(value);
+    };
+
+    Word.prototype.SubByte = function (value) {
+        value = typeof value != "number" ? new Byte(value) : value;
+        return this.AddByte(value.Neg(), true);
+    };
+
+    Word.prototype.Not = function () {
+        this.value[0].Not();
+        this.value[1].Not();
+    };
+
+    Word.prototype.And = function (value) {
+        value = typeof value == "number" ? new Word(value) : value;
+        this.value[0].And(value.High());
+        this.value[1].And(value.Low());
+    };
+
+    Word.prototype.Or = function (value) {
+        value = typeof value == "number" ? new Word(value) : value;
+        this.value[0].Or(value.High());
+        this.value[1].Or(value.Low());
+    };
+
+    Word.prototype.Xor = function (value) {
+        value = typeof value == "number" ? new Word(value) : value;
+        this.value[0].Xor(value.High());
+        this.value[1].Xor(value.Low());
+    };
+
+    Word.prototype.Neg = function () {
+        this.Not();
+        this.Add(1);
     };
     return Word;
 })();

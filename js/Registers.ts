@@ -54,7 +54,8 @@ class Registers {
         }
     }
 
-    public static Exchange(a: string, b: string) {
-
+    public static SetRegisterPair(pair: string, value: Word) {
+        Registers.byteRegisters[pair[0]] = value.High();
+        Registers.byteRegisters[pair[1]] = value.Low();
     }
 }

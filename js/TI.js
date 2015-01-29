@@ -12,7 +12,9 @@ var TI = (function () {
     };
 
     TI.Init = function () {
+        Registers.Init();
         LCD.Init();
+        Memory.Init();
         var a = new Byte(0xF0);
         var b = new Byte(10);
 

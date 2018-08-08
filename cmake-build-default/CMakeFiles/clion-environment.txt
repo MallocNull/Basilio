@@ -1,0 +1,4 @@
+ToolSet: w64 3.0@C:\MinGW
+Options: 
+
+Options:-DSDL2_DIR=C:\TEMP\SDL2

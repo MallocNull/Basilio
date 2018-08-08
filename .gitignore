@@ -2,7 +2,7 @@
 ## Temporary Exclusions
 #################
 .idea/
-dbinfo.php
+cmake-*/
 
 #################
 ## Eclipse

@@ -8,10 +8,10 @@ file(GLOB_RECURSE basilio_src
     "src/*.h"
 )
 
-find_package(SDL2 REQUIRED)
-include_directories(SDL2 ${SDL_INCLUDE_DIRS})
+find_package(SDL)
 
+include_directories(${SDL_INCLUDE_DIR})
 add_executable(basilio ${basilio_src})
-target_link_libraries(basilio ${SDL_LIBRARIES})
+target_link_libraries(basilio ${SDL_LIBRARY})
 
 install(TARGETS basilio RUNTIME DESTINATION bin)

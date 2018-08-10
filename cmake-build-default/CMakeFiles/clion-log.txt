@@ -1,5 +1,0 @@
-C:\msys64\mingw64\bin\cmake.exe -DCMAKE_BUILD_TYPE= -DTEST=TESTm -G "CodeBlocks - MinGW Makefiles" C:\Users\Alec\Desktop\GitHub\Basilio
--- Found SDL: mingw32;-mwindows;C:/msys64/mingw64/lib/libSDLmain.a;C:/msys64/mingw64/lib/libSDL.dll.a (found version "1.2.15") 
--- Configuring done
--- Generating done
--- Build files have been written to: C:/Users/Alec/Desktop/GitHub/Basilio/cmake-build-default

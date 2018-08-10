@@ -12,7 +12,7 @@ int main(int argc, char* argv[]) {
     if(screen == NULL)
         return -1;
 
-    // if you are reading this your usc
+
 
     return 0;
 }

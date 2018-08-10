@@ -2,7 +2,7 @@
 ## Temporary Exclusions
 #################
 .idea/
-cmake-*/
+cmake-build-*/
 
 #################
 ## Eclipse
